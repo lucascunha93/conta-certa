@@ -1,2 +1,13 @@
-/* For information on how to create your own theme, please see:
-http://ionicframework.com/docs/theming/ */
+/* Tema claro personalizado para fundo branco */
+:root {
+	--ion-background-color: #fff;
+	--ion-background-color-rgb: 255,255,255;
+	--ion-text-color: #222;
+	--ion-text-color-rgb: 34,34,34;
+	--ion-color-light: #f8f9fa;
+	--ion-color-light-rgb: 248,249,250;
+	--ion-color-medium: #92949c;
+	--ion-color-medium-rgb: 146,148,156;
+	--ion-color-dark: #222428;
+	--ion-color-dark-rgb: 34,36,40;
+}

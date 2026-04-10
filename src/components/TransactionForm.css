@@ -1,0 +1,13 @@
+.transaction-button.entrada {
+  --background: var(--ion-color-success);
+  --background-activated: var(--ion-color-success-shade);
+  --background-focused: var(--ion-color-success-shade);
+  --background-hover: var(--ion-color-success-tint);
+}
+
+.transaction-button.saida {
+  --background: var(--ion-color-danger);
+  --background-activated: var(--ion-color-danger-shade);
+  --background-focused: var(--ion-color-danger-shade);
+  --background-hover: var(--ion-color-danger-tint);
+}

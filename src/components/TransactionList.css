@@ -1,0 +1,233 @@
+.edit-icon {
+  color: var(--ion-color-primary);
+  font-size: 1.3rem;
+  transition: color 0.2s;
+}
+.edit-icon:hover {
+  color: #0057b8;
+}
+/* Tabela de transações */
+.transaction-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  font-size: 1rem;
+  min-width: 700px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.transaction-table th, .transaction-table td {
+  padding: 12px 10px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.transaction-table th {
+  background: #f8f9fa;
+  font-weight: 700;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.transaction-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.15s;
+}
+
+.transaction-table tbody tr:hover {
+  background: #f4f8fb;
+}
+
+.transaction-row.entrada {
+  border-left: 4px solid var(--ion-color-success);
+}
+.transaction-row.saida {
+  border-left: 4px solid var(--ion-color-danger);
+}
+
+.td-client {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--ion-color-dark);
+}
+
+.transaction-amount {
+  font-weight: 700;
+  font-size: 1.08rem;
+  text-align: right;
+}
+.transaction-amount.entrada {
+  color: var(--ion-color-success);
+}
+.transaction-amount.saida {
+  color: var(--ion-color-danger);
+}
+
+.delete-icon {
+  color: var(--ion-color-danger);
+  font-size: 1.3rem;
+  transition: color 0.2s;
+}
+.delete-icon:hover {
+  color: #b00020;
+}
+
+@media (max-width: 900px) {
+  .transaction-table {
+    font-size: 0.95rem;
+    min-width: 600px;
+  }
+  .transaction-table th, .transaction-table td {
+    padding: 8px 6px;
+  }
+}
+.transaction-content {
+  width: 100%;
+  padding: 8px 0;
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.transaction-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-icon {
+  font-size: 1.2rem;
+  color: var(--ion-color-medium);
+}
+
+.transaction-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--ion-color-dark);
+}
+
+.transaction-amount {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.transaction-amount.entrada {
+  color: var(--ion-color-success);
+}
+
+.transaction-amount.saida {
+  color: var(--ion-color-danger);
+}
+
+.transaction-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  color: var(--ion-color-medium);
+}
+
+.detail-icon {
+  font-size: 1rem;
+}
+
+.cpf-label {
+  font-weight: 500;
+}
+
+.transaction-observations {
+  margin: 8px 0;
+  padding: 8px;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.transaction-type-badge {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.transaction-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  --background: var(--ion-color-light);
+}
+
+.transaction-item.entrada {
+  border-left: 4px solid var(--ion-color-success);
+}
+
+.transaction-item.saida {
+  border-left: 4px solid var(--ion-color-danger);
+}
+
+.transaction-count {
+  margin-left: 8px;
+  font-size: 0.8rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ion-color-medium);
+}
+
+.empty-state ion-icon {
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  margin: 16px 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .transaction-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .transaction-amount {
+    font-size: 1rem;
+  }
+  
+  .transaction-details {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .transaction-type-badge {
+    justify-content: flex-start;
+  }
+}
