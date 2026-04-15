@@ -16,7 +16,7 @@ import {
   IonModal,
 } from '@ionic/react';
 import { trash, create, document, chevronBack, chevronForward, downloadOutline } from 'ionicons/icons';
-import { Transaction } from '../types/transaction';
+import { Transaction } from '../../types/transaction';
 import './TransactionList.css';
 
 type TypeFilter = 'todos' | 'entrada' | 'saida';

@@ -16,7 +16,7 @@ import {
   IonCol,
   IonToast,
 } from '@ionic/react';
-import { Transaction } from '../types/transaction';
+import { Transaction } from '../../types/transaction';
 import './TransactionForm.css';
 
 

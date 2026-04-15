@@ -7,7 +7,7 @@ import {
   IonIcon,
 } from '@ionic/react';
 import { arrowUpCircle, arrowDownCircle, wallet } from 'ionicons/icons';
-import { TransactionSummary } from '../types/transaction';
+import { TransactionSummary } from '../../types/transaction';
 import './FinancialSummary.css';
 
 interface FinancialSummaryProps {

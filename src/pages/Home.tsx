@@ -2,9 +2,9 @@
 import { useState, useMemo, useCallback } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonModal, IonFab, IonFabButton, IonIcon } from '@ionic/react';
 import { add } from 'ionicons/icons';
-import TransactionForm from '../components/TransactionForm';
-import FinancialSummary from '../components/FinancialSummary';
-import TransactionList from '../components/TransactionList';
+import TransactionForm from '../components/TransactionForm/TransactionForm';
+import FinancialSummary from '../components/FinancialSummary/FinancialSummary';
+import TransactionList from '../components/TransactionList/TransactionList';
 import { useTransactions } from '../hooks/useTransactions';
 import { Transaction, TransactionSummary } from '../types/transaction';
 import './Home.css';
