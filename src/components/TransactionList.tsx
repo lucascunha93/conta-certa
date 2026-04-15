@@ -228,7 +228,6 @@ const TransactionList: React.FC<TransactionListProps> = ({
                 {filteredTransactions.map((transaction) => (
                   <tr key={transaction.id} className={`transaction-row ${transaction.type}`}>
                     <td className="td-client">
-                      <IonIcon icon={person} className="info-icon" />
                       <span className="transaction-name">{transaction.name}</span>
                     </td>
                     <td>{formatDate(transaction.date)}</td>
