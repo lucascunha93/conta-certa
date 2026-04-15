@@ -58,6 +58,11 @@ npx cap open android   # ou ios
 
 ```
 src/
+├── App.test.tsx
+├── App.tsx
+├── main.tsx
+├── setupTests.ts
+├── vite-env.d.ts
 ├── components/
 │   ├── FinancialSummary/
 │   │   ├── FinancialSummary.tsx     # Cards de resumo (entradas, saídas e saldo)
@@ -69,15 +74,15 @@ src/
 │       ├── TransactionList.tsx      # Listagem mensal com navegador de mês, filtros e exportação
 │       └── TransactionList.css
 ├── hooks/
-│   └── useTransactions.ts       # Gerenciamento de estado e persistência das movimentações
+│   └── useTransactions.ts           # Gerenciamento de estado e persistência das movimentações
 ├── pages/
-│   ├── Home.tsx                 # Página principal — orquestra todos os componentes
+│   ├── Home.tsx                     # Página principal — orquestra todos os componentes
 │   └── Home.css
 ├── theme/
-│   ├── variables.css            # Variáveis de cor e tema do Ionic
-│   └── utilities.css            # Classes utilitárias globais
+│   ├── utilities.css                # Classes utilitárias globais
+│   └── variables.css                # Variáveis de cor e tema do Ionic
 └── types/
-    └── transaction.ts           # Interfaces Transaction, TransactionSummary e TransactionFilter
+    └── transaction.ts               # Interfaces Transaction, TransactionSummary e TransactionFilter
 ```
 
 ## Licença
