@@ -1,11 +1,12 @@
 
 import { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonModal } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonModal, IonFab, IonFabButton, IonIcon } from '@ionic/react';
+import { add } from 'ionicons/icons';
 import TransactionForm from '../components/TransactionForm';
 import FinancialSummary from '../components/FinancialSummary';
 import TransactionList from '../components/TransactionList';
 import { useTransactions } from '../hooks/useTransactions';
-import { Transaction } from '../types/transaction';
+import { Transaction, TransactionSummary } from '../types/transaction';
 import './Home.css';
 
 
@@ -15,13 +16,36 @@ const Home: React.FC = () => {
     addTransaction,
     updateTransaction,
     removeTransaction,
-    filter,
-    setFilter,
-    summary,
   } = useTransactions();
+
+  const now = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(now.getMonth());
+  const [selectedYear, setSelectedYear] = useState(now.getFullYear());
 
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
+  const [addModalOpen, setAddModalOpen] = useState(false);
+
+  const handleMonthChange = (month: number, year: number) => {
+    setSelectedMonth(month);
+    setSelectedYear(year);
+  };
+
+  const monthTransactions = transactions.filter(t => {
+    const d = new Date(t.date + 'T00:00:00');
+    return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
+  });
+
+  const monthlySummary: TransactionSummary = (() => {
+    const totalEntradas = monthTransactions.filter(t => t.type === 'entrada').reduce((s, t) => s + t.amount, 0);
+    const totalSaidas = monthTransactions.filter(t => t.type === 'saida').reduce((s, t) => s + t.amount, 0);
+    return { totalEntradas, totalSaidas, saldo: totalEntradas - totalSaidas };
+  })();
+
+  const handleAddTransaction = (transaction: Omit<Transaction, 'id' | 'createdAt'>) => {
+    addTransaction(transaction);
+    setAddModalOpen(false);
+  };
 
   const handleEditTransaction = (transaction: Transaction) => {
     setTransactionToEdit(transaction);
@@ -55,16 +79,33 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <div className="home-container">
-          <FinancialSummary summary={summary} />
-          <TransactionForm onAddTransaction={addTransaction} />
-          <TransactionList
-            transactions={transactions}
-            filter={filter}
-            onFilterChange={setFilter}
-            onRemoveTransaction={removeTransaction}
-            onEditTransaction={handleEditTransaction}
-          />
+          <div className="transactions-section">
+            <TransactionList
+              transactions={monthTransactions}
+              selectedMonth={selectedMonth}
+              selectedYear={selectedYear}
+              onMonthChange={handleMonthChange}
+              onRemoveTransaction={removeTransaction}
+              onEditTransaction={handleEditTransaction}
+            />
+          </div>
+          <FinancialSummary summary={monthlySummary} />
         </div>
+
+        <IonFab vertical="bottom" horizontal="end" slot="fixed">
+          <IonFabButton onClick={() => setAddModalOpen(true)}>
+            <IonIcon icon={add} />
+          </IonFabButton>
+        </IonFab>
+
+        <IonModal isOpen={addModalOpen} onDidDismiss={() => setAddModalOpen(false)} backdropDismiss={true}>
+          <div style={{ padding: 16 }}>
+            <TransactionForm
+              onAddTransaction={handleAddTransaction}
+              onCancel={() => setAddModalOpen(false)}
+            />
+          </div>
+        </IonModal>
 
         <IonModal isOpen={editModalOpen} onDidDismiss={handleCloseModal} backdropDismiss={true}>
           {transactionToEdit && (

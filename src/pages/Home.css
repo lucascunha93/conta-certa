@@ -2,14 +2,25 @@
   padding: 16px;
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: calc(100vh - 120px);
 }
 
 .home-container > * {
-  margin-bottom: 16px;
+  margin-bottom: 0;
+}
+
+.transactions-section {
+  flex: 1;
+  min-height: 0;
+  display: flex;
 }
 
 @media (max-width: 768px) {
   .home-container {
     padding: 8px;
+    min-height: auto;
   }
 }

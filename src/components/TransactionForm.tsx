@@ -216,7 +216,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
                   >
                     {isEditMode ? 'Salvar Alterações' : `Adicionar ${formData.type === 'entrada' ? 'Entrada' : 'Saída'}`}
                   </IonButton>
-                  {isEditMode && onCancel && (
+                  {onCancel && (
                     <IonButton expand="block" color="medium" onClick={onCancel} style={{ marginTop: 8 }}>
                       Cancelar
                     </IonButton>
