@@ -99,7 +99,7 @@ const Home: React.FC = () => {
         </IonFab>
 
         <IonModal isOpen={addModalOpen} onDidDismiss={() => setAddModalOpen(false)} backdropDismiss={true}>
-          <div style={{ padding: 16 }}>
+          <div className="u-modal-content-padding">
             <TransactionForm
               onAddTransaction={handleAddTransaction}
               onCancel={() => setAddModalOpen(false)}
@@ -109,7 +109,7 @@ const Home: React.FC = () => {
 
         <IonModal isOpen={editModalOpen} onDidDismiss={handleCloseModal} backdropDismiss={true}>
           {transactionToEdit && (
-            <div style={{ padding: 16 }}>
+            <div className="u-modal-content-padding">
               <TransactionForm
                 onAddTransaction={handleUpdateTransaction}
                 initialData={transactionToEdit}

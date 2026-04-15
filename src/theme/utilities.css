@@ -1,0 +1,17 @@
+.u-modal-content-padding {
+  padding: 16px;
+}
+
+.u-mt-8 {
+  margin-top: 8px;
+}
+
+.u-clickable {
+  cursor: pointer;
+}
+
+.u-flex-row-center-gap-12 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

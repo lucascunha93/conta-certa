@@ -8,21 +8,17 @@ export const useTransactions = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loaded, setLoaded] = useState(false);
 
-  // Carregar transações do localStorage
   useEffect(() => {
     const savedTransactions = localStorage.getItem(STORAGE_KEY);
-    console.log('[Conta Certa] Lendo do localStorage:', savedTransactions);
     if (savedTransactions) {
       setTransactions(JSON.parse(savedTransactions));
     }
     setLoaded(true);
   }, []);
 
-  // Salvar no localStorage quando transações mudarem, mas só depois do carregamento inicial
   useEffect(() => {
     if (!loaded) return;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
-    console.log('[Conta Certa] Salvando no localStorage:', transactions);
   }, [transactions, loaded]);
 
 

@@ -15,7 +15,7 @@ import {
   IonActionSheet,
   IonModal,
 } from '@ionic/react';
-import { trash, create, person, document, chevronBack, chevronForward, downloadOutline } from 'ionicons/icons';
+import { trash, create, document, chevronBack, chevronForward, downloadOutline } from 'ionicons/icons';
 import { Transaction } from '../types/transaction';
 import './TransactionList.css';
 
@@ -245,18 +245,16 @@ const TransactionList: React.FC<TransactionListProps> = ({
                         <IonNote color="medium">{transaction.observations}</IonNote>
                       )}
                     </td>
-                    <td style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                    <td className="u-flex-row-center-gap-12">
                       <IonIcon
                         icon={create}
-                        className="edit-icon"
-                        style={{ cursor: 'pointer' }}
+                        className="edit-icon u-clickable"
                         onClick={() => onEditTransaction?.(transaction)}
                         title="Editar"
                       />
                       <IonIcon
                         icon={trash}
-                        className="delete-icon"
-                        style={{ cursor: 'pointer' }}
+                        className="delete-icon u-clickable"
                         onClick={() => setTransactionToDelete(transaction)}
                         title="Excluir"
                       />

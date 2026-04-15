@@ -34,7 +34,6 @@
   color: var(--ion-color-dark);
 }
 
-/* Estilos específicos por tipo */
 .summary-item.entrada {
   background: rgba(var(--ion-color-success-rgb), 0.1);
   border-left: 4px solid var(--ion-color-success);

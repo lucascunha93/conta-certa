@@ -40,29 +40,22 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
     observations: initialData?.observations || '',
   });
 
-  // Função para formatar valor como moeda BRL
   const formatBRL = (value: string) => {
-    const clean = value.replace(/\D/g, '');
-    const number = (parseInt(clean, 10) / 100).toFixed(2);
+    const clean = value.replaceAll(/\D/g, '');
+    const number = (Number.parseInt(clean, 10) / 100).toFixed(2);
     return Number.isNaN(Number(number)) ? '' :
       Number(number).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   };
 
-  // Função para extrair valor numérico do formato BRL
   const parseBRL = (value: string) => {
-    const clean = value.replace(/\D/g, '');
-    return clean ? (parseInt(clean, 10) / 100) : 0;
+    const clean = value.replaceAll(/\D/g, '');
+    return clean ? (Number.parseInt(clean, 10) / 100) : 0;
   };
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  const validateCPF = (cpf: string): boolean => {
-    const cleanCPF = cpf.replace(/\D/g, '');
-    return cleanCPF.length === 11;
-  };
-
   const formatCPF = (value: string): string => {
-    const cleanValue = value.replace(/\D/g, '');
+    const cleanValue = value.replaceAll(/\D/g, '');
     return cleanValue
       .replace(/(\d{3})(\d)/, '$1.$2')
       .replace(/(\d{3})(\d)/, '$1.$2')
@@ -71,17 +64,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validações
+
     if (!formData.name.trim()) {
       setToastMessage('Nome é obrigatório');
       setShowToast(true);
       return;
     }
-    
-
-    // CPF não é mais obrigatório
-    
 
     const amountNumber = parseBRL(formData.amount);
     if (!formData.amount || amountNumber <= 0) {
@@ -90,18 +78,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
       return;
     }
 
-    // Adicionar ou atualizar transação
     onAddTransaction({
       type: formData.type,
       date: formData.date,
       name: formData.name.trim(),
-      cpf: formData.cpf.replace(/\D/g, ''),
+      cpf: formData.cpf.replaceAll(/\D/g, ''),
       amount: amountNumber,
       observations: formData.observations.trim() || undefined,
     });
 
     if (!isEditMode) {
-      // Limpar formulário apenas se não for edição
       setFormData({
         type: 'entrada',
         date: new Date().toISOString().split('T')[0],
@@ -112,9 +98,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
       });
     }
 
-    setToastMessage(isEditMode ? 'Movimentação atualizada com sucesso!' : `${formData.type === 'entrada' ? 'Entrada' : 'Saída'} adicionada com sucesso!`);
+    const transactionTypeLabel = formData.type === 'entrada' ? 'Entrada' : 'Saída';
+    const successMessage = isEditMode
+      ? 'Movimentação atualizada com sucesso!'
+      : `${transactionTypeLabel} adicionada com sucesso!`;
+    setToastMessage(successMessage);
     setShowToast(true);
   };
+
+  const submitAction = formData.type === 'entrada' ? 'Entrada' : 'Saída';
+  const submitButtonLabel = isEditMode ? 'Salvar Alterações' : `Adicionar ${submitAction}`;
 
   return (
     <>
@@ -214,10 +207,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
                     expand="block" 
                     className={`transaction-button ${formData.type}`}
                   >
-                    {isEditMode ? 'Salvar Alterações' : `Adicionar ${formData.type === 'entrada' ? 'Entrada' : 'Saída'}`}
+                    {submitButtonLabel}
                   </IonButton>
                   {onCancel && (
-                    <IonButton expand="block" color="medium" onClick={onCancel} style={{ marginTop: 8 }}>
+                    <IonButton expand="block" color="medium" onClick={onCancel} className="u-mt-8">
                       Cancelar
                     </IonButton>
                   )}
