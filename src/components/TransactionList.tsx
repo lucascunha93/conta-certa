@@ -13,6 +13,7 @@ import {
   IonText,
   IonButton,
   IonActionSheet,
+  IonModal,
 } from '@ionic/react';
 import { trash, create, person, document, chevronBack, chevronForward, downloadOutline } from 'ionicons/icons';
 import { Transaction } from '../types/transaction';
@@ -45,6 +46,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('todos');
   const [showExportOptions, setShowExportOptions] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
 
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat('pt-BR', {
@@ -256,7 +258,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                         icon={trash}
                         className="delete-icon"
                         style={{ cursor: 'pointer' }}
-                        onClick={() => onRemoveTransaction(transaction.id)}
+                        onClick={() => setTransactionToDelete(transaction)}
                         title="Excluir"
                       />
                     </td>
@@ -287,6 +289,46 @@ const TransactionList: React.FC<TransactionListProps> = ({
           },
         ]}
       />
+
+      <IonModal
+        isOpen={transactionToDelete !== null}
+        onDidDismiss={() => setTransactionToDelete(null)}
+        className="confirm-delete-modal"
+        backdropDismiss={true}
+      >
+        <div className="confirm-delete-content">
+          <h2>Confirmar exclusão</h2>
+          <p>
+            Você está prestes a excluir a movimentação de
+            {' '}
+            <strong>{transactionToDelete?.name}</strong>.
+          </p>
+          <p className="confirm-delete-warning">
+            Essa ação não pode ser desfeita.
+          </p>
+
+          <div className="confirm-delete-actions">
+            <IonButton
+              fill="outline"
+              color="medium"
+              onClick={() => setTransactionToDelete(null)}
+            >
+              Cancelar
+            </IonButton>
+            <IonButton
+              color="danger"
+              onClick={() => {
+                if (transactionToDelete) {
+                  onRemoveTransaction(transactionToDelete.id);
+                  setTransactionToDelete(null);
+                }
+              }}
+            >
+              Excluir
+            </IonButton>
+          </div>
+        </div>
+      </IonModal>
     </IonCard>
   );
 };

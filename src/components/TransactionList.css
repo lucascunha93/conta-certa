@@ -243,6 +243,45 @@
   font-weight: 500;
 }
 
+.confirm-delete-modal {
+  --width: min(92vw, 440px);
+  --height: auto;
+  --border-radius: 16px;
+  --box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+}
+
+.confirm-delete-content {
+  padding: 24px;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfbfc 100%);
+}
+
+.confirm-delete-content h2 {
+  margin: 0 0 10px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.confirm-delete-content p {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: #4b5563;
+}
+
+.confirm-delete-warning {
+  margin-top: 10px !important;
+  color: #b91c1c !important;
+  font-weight: 600;
+}
+
+.confirm-delete-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 @media (max-width: 768px) {
   .list-header-row {
     flex-direction: column;
@@ -270,5 +309,17 @@
   
   .transaction-type-badge {
     justify-content: flex-start;
+  }
+
+  .confirm-delete-content {
+    padding: 20px;
+  }
+
+  .confirm-delete-actions {
+    justify-content: stretch;
+  }
+
+  .confirm-delete-actions ion-button {
+    flex: 1;
   }
 }
