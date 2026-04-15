@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import {
   IonCard,
   IonCardContent,
@@ -30,6 +30,20 @@ interface TransactionListProps {
   onEditTransaction?: (transaction: Transaction) => void;
 }
 
+const currencyFormatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+const formatCurrency = (value: number): string => currencyFormatter.format(value);
+
+const formatCPF = (cpf: string): string => {
+  if (!cpf || cpf.replaceAll(/\D/g, '').length === 0) {
+    return 'Não informado';
+  }
+  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+};
+
+const formatDate = (dateString: string): string =>
+  new Date(dateString + 'T00:00:00').toLocaleDateString('pt-BR');
+
 const MONTH_NAMES = [
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
@@ -48,52 +62,36 @@ const TransactionList: React.FC<TransactionListProps> = ({
   const [isExporting, setIsExporting] = useState(false);
   const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
 
-  const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
-  };
-
-  const formatCPF = (cpf: string): string => {
-    if (!cpf || cpf.replaceAll(/\D/g, '').length === 0) {
-      return 'Não informado';
-    }
-    return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-  };
-
-  const formatDate = (dateString: string): string => {
-    return new Date(dateString + 'T00:00:00').toLocaleDateString('pt-BR');
-  };
-
-  const handlePrevMonth = () => {
+  const handlePrevMonth = useCallback(() => {
     if (selectedMonth === 0) {
       onMonthChange(11, selectedYear - 1);
     } else {
       onMonthChange(selectedMonth - 1, selectedYear);
     }
-  };
+  }, [selectedMonth, selectedYear, onMonthChange]);
 
-  const handleNextMonth = () => {
+  const handleNextMonth = useCallback(() => {
     if (selectedMonth === 11) {
       onMonthChange(0, selectedYear + 1);
     } else {
       onMonthChange(selectedMonth + 1, selectedYear);
     }
-  };
+  }, [selectedMonth, selectedYear, onMonthChange]);
 
-  const filteredTransactions = [...transactions]
-    .filter(t => typeFilter === 'todos' || t.type === typeFilter)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const filteredTransactions = useMemo(() =>
+    [...transactions]
+      .filter(t => typeFilter === 'todos' || t.type === typeFilter)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  , [transactions, typeFilter]);
 
-  const exportRows = filteredTransactions.map((transaction) => ({
+  const exportRows = useMemo(() => filteredTransactions.map((transaction) => ({
     Cliente: transaction.name,
     Data: formatDate(transaction.date),
     CPF: formatCPF(transaction.cpf),
     Valor: `${transaction.type === 'entrada' ? '+' : '-'} ${formatCurrency(transaction.amount)}`,
     Tipo: transaction.type === 'entrada' ? 'Entrada' : 'Saida',
     Observacoes: transaction.observations || '-',
-  }));
+  })), [filteredTransactions]);
 
   const fileDateSuffix = `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}`;
 

@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonModal, IonFab, IonFabButton, IonIcon } from '@ionic/react';
 import { add } from 'ionicons/icons';
 import TransactionForm from '../components/TransactionForm';
@@ -26,44 +26,50 @@ const Home: React.FC = () => {
   const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
 
-  const handleMonthChange = (month: number, year: number) => {
+  const handleMonthChange = useCallback((month: number, year: number) => {
     setSelectedMonth(month);
     setSelectedYear(year);
-  };
+  }, []);
 
-  const monthTransactions = transactions.filter(t => {
-    const d = new Date(t.date + 'T00:00:00');
-    return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
-  });
+  const monthTransactions = useMemo(() =>
+    transactions.filter(t => {
+      const d = new Date(t.date + 'T00:00:00');
+      return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
+    })
+  , [transactions, selectedMonth, selectedYear]);
 
-  const monthlySummary: TransactionSummary = (() => {
-    const totalEntradas = monthTransactions.filter(t => t.type === 'entrada').reduce((s, t) => s + t.amount, 0);
-    const totalSaidas = monthTransactions.filter(t => t.type === 'saida').reduce((s, t) => s + t.amount, 0);
+  const monthlySummary = useMemo<TransactionSummary>(() => {
+    const totalEntradas = monthTransactions
+      .filter(t => t.type === 'entrada')
+      .reduce((s, t) => s + t.amount, 0);
+    const totalSaidas = monthTransactions
+      .filter(t => t.type === 'saida')
+      .reduce((s, t) => s + t.amount, 0);
     return { totalEntradas, totalSaidas, saldo: totalEntradas - totalSaidas };
-  })();
+  }, [monthTransactions]);
 
-  const handleAddTransaction = (transaction: Omit<Transaction, 'id' | 'createdAt'>) => {
+  const handleAddTransaction = useCallback((transaction: Omit<Transaction, 'id' | 'createdAt'>) => {
     addTransaction(transaction);
     setAddModalOpen(false);
-  };
+  }, [addTransaction]);
 
-  const handleEditTransaction = (transaction: Transaction) => {
+  const handleEditTransaction = useCallback((transaction: Transaction) => {
     setTransactionToEdit(transaction);
     setEditModalOpen(true);
-  };
+  }, []);
 
-  const handleUpdateTransaction = (updated: Omit<Transaction, 'id' | 'createdAt'>) => {
+  const handleUpdateTransaction = useCallback((updated: Omit<Transaction, 'id' | 'createdAt'>) => {
     if (transactionToEdit) {
       updateTransaction({ ...transactionToEdit, ...updated });
       setEditModalOpen(false);
       setTransactionToEdit(null);
     }
-  };
+  }, [transactionToEdit, updateTransaction]);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setEditModalOpen(false);
     setTransactionToEdit(null);
-  };
+  }, []);
 
   return (
     <IonPage>
