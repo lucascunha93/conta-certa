@@ -1,9 +1,9 @@
 .transaction-list-card {
   width: 100%;
   margin: 0;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
+  background: var(--cc-surface-glass);
+  border: 1px solid var(--cc-border-soft);
+  box-shadow: var(--cc-shadow-md);
   backdrop-filter: blur(7px);
 }
 
@@ -14,7 +14,7 @@
 .month-label {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #0f172a;
+  color: var(--cc-text-primary);
   letter-spacing: 0.01em;
   min-width: 180px;
   text-align: center;
@@ -39,7 +39,7 @@
 
 .transaction-table thead th {
   background: #f8fafc;
-  color: #334155;
+  color: var(--cc-text-secondary);
   font-weight: 700;
 }
 
@@ -48,11 +48,11 @@
 }
 
 .transaction-row.entrada td:first-child {
-  border-left: 3px solid #22c55e;
+  border-left: 3px solid var(--cc-success-strong);
 }
 
 .transaction-row.saida td:first-child {
-  border-left: 3px solid #ef4444;
+  border-left: 3px solid var(--cc-danger-strong);
 }
 
 .transaction-table tbody tr {
@@ -78,7 +78,7 @@
 
 .td-client {
   font-weight: 700;
-  color: #0f172a;
+  color: var(--cc-text-primary);
 }
 
 .transaction-name {
@@ -90,11 +90,11 @@
 }
 
 .transaction-amount.entrada {
-  color: #16a34a;
+  color: var(--cc-success-strong);
 }
 
 .transaction-amount.saida {
-  color: #dc2626;
+  color: var(--cc-danger-strong);
 }
 
 .observation-cell {
@@ -105,15 +105,15 @@
   text-align: center;
   padding: 34px 20px;
   margin-top: 12px;
-  border: 1px dashed rgba(148, 163, 184, 0.38);
-  background: rgba(248, 250, 252, 0.78);
+  border: 1px dashed var(--cc-border-dashed);
+  background: var(--cc-surface-soft);
 }
 
 .confirm-delete-modal {
   --width: min(92vw, 440px);
   --height: auto;
-  --border-radius: 16px;
-  --box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+  --border-radius: var(--cc-radius-lg);
+  --box-shadow: var(--cc-shadow-lg);
 }
 
 .confirm-delete-content {
@@ -125,19 +125,19 @@
   margin: 0 0 10px;
   font-size: 1.3rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--cc-text-primary);
 }
 
 .confirm-delete-content p {
   margin: 0;
   font-size: 0.98rem;
   line-height: 1.5;
-  color: #4b5563;
+  color: var(--cc-text-muted);
 }
 
 .confirm-delete-warning {
   margin-top: 10px !important;
-  color: #b91c1c !important;
+  color: var(--cc-danger-strong) !important;
   font-weight: 600;
 }
 
@@ -146,6 +146,28 @@
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+}
+
+.export-actionsheet .action-sheet-group {
+  border-radius: var(--cc-radius-lg);
+  box-shadow: var(--cc-shadow-sm);
+  border: 1px solid var(--cc-border-soft);
+  overflow: hidden;
+}
+
+.export-actionsheet .action-sheet-title {
+  color: var(--cc-text-primary);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.export-actionsheet .action-sheet-button {
+  color: var(--cc-text-secondary);
+  font-weight: 600;
+}
+
+.export-actionsheet .action-sheet-button.action-sheet-cancel {
+  color: var(--cc-danger-strong);
 }
 
 @media (max-width: 768px) {

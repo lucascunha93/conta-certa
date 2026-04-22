@@ -105,6 +105,14 @@ const TransactionList: React.FC<TransactionListProps> = ({
 
   const fileDateSuffix = `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}`;
 
+  const warmupExportLibraries = useCallback(() => {
+    void Promise.all([
+      import('xlsx'),
+      import('jspdf'),
+      import('jspdf-autotable'),
+    ]);
+  }, []);
+
   const handleExportExcel = async () => {
     if (exportRows.length === 0) return;
 
@@ -181,7 +189,10 @@ const TransactionList: React.FC<TransactionListProps> = ({
           color="blue"
           radius="md"
           leftSection={<IconDownload size={16} />}
-          onClick={() => setShowExportOptions(true)}
+          onClick={() => {
+            warmupExportLibraries();
+            setShowExportOptions(true);
+          }}
           disabled={filteredTransactions.length === 0 || isExporting}
           className="export-button"
         >
@@ -291,6 +302,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
       <IonActionSheet
         isOpen={showExportOptions}
         onDidDismiss={() => setShowExportOptions(false)}
+        cssClass="export-actionsheet"
         header="Exportar movimentações"
         buttons={[
           {

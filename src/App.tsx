@@ -1,8 +1,8 @@
+import { Suspense, lazy } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { MantineProvider } from '@mantine/core';
-import Home from './pages/Home';
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
@@ -20,9 +20,12 @@ import '@fontsource/manrope/500.css';
 import '@fontsource/manrope/600.css';
 import '@fontsource/manrope/700.css';
 import './theme/variables.css';
+import './theme/tokens.css';
 import './theme/utilities.css';
 
 setupIonicReact();
+
+const Home = lazy(() => import('./pages/Home'));
 
 const App: React.FC = () => (
   <MantineProvider
@@ -58,7 +61,9 @@ const App: React.FC = () => (
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path="/home">
-            <Home />
+            <Suspense fallback={<div style={{ padding: 24, color: '#334155' }}>Carregando painel...</div>}>
+              <Home />
+            </Suspense>
           </Route>
           <Route exact path="/">
             <Redirect to="/home" />

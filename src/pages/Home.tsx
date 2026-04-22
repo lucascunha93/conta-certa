@@ -1,13 +1,14 @@
 
-import { useState, useMemo, useCallback } from 'react';
+import { Suspense, lazy, useState, useMemo, useCallback } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonModal, IonFab, IonFabButton, IonIcon } from '@ionic/react';
 import { add } from 'ionicons/icons';
-import TransactionForm from '../components/TransactionForm/TransactionForm';
 import FinancialSummary from '../components/FinancialSummary/FinancialSummary';
 import TransactionList from '../components/TransactionList/TransactionList';
 import { useTransactions } from '../hooks/useTransactions';
 import { Transaction, TransactionSummary } from '../types/transaction';
 import './Home.css';
+
+const TransactionForm = lazy(() => import('../components/TransactionForm/TransactionForm'));
 
 
 const Home: React.FC = () => {
@@ -107,24 +108,30 @@ const Home: React.FC = () => {
         </IonFab>
 
         <IonModal isOpen={addModalOpen} onDidDismiss={() => setAddModalOpen(false)} backdropDismiss={true}>
-          <div className="u-modal-content-padding">
-            <TransactionForm
-              onAddTransaction={handleAddTransaction}
-              onCancel={() => setAddModalOpen(false)}
-            />
-          </div>
+          {addModalOpen && (
+            <Suspense fallback={<div className="modal-loading">Carregando formulário...</div>}>
+              <div className="u-modal-content-padding">
+                <TransactionForm
+                  onAddTransaction={handleAddTransaction}
+                  onCancel={() => setAddModalOpen(false)}
+                />
+              </div>
+            </Suspense>
+          )}
         </IonModal>
 
         <IonModal isOpen={editModalOpen} onDidDismiss={handleCloseModal} backdropDismiss={true}>
-          {transactionToEdit && (
-            <div className="u-modal-content-padding">
-              <TransactionForm
-                onAddTransaction={handleUpdateTransaction}
-                initialData={transactionToEdit}
-                isEditMode
-                onCancel={handleCloseModal}
-              />
-            </div>
+          {editModalOpen && transactionToEdit && (
+            <Suspense fallback={<div className="modal-loading">Carregando formulário...</div>}>
+              <div className="u-modal-content-padding">
+                <TransactionForm
+                  onAddTransaction={handleUpdateTransaction}
+                  initialData={transactionToEdit}
+                  isEditMode
+                  onCancel={handleCloseModal}
+                />
+              </div>
+            </Suspense>
           )}
         </IonModal>
       </IonContent>
