@@ -103,7 +103,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
     Observacoes: transaction.observations || '-',
   })), [filteredTransactions]);
 
-  const fileDateSuffix = `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}`;
+  const fileDateSuffix = `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
 
   const warmupExportLibraries = useCallback(() => {
     void Promise.all([
