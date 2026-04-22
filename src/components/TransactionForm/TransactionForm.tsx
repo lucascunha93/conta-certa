@@ -15,7 +15,7 @@ import {
   Title,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { IconCalendar, IconCurrencyReal, IconId, IconUser } from '@tabler/icons-react';
+import { IconCalendar, IconId, IconUser } from '@tabler/icons-react';
 import { Transaction } from '../../types/transaction';
 import './TransactionForm.css';
 
@@ -205,7 +205,6 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
                 }}
                 label="Valor (R$)"
                 placeholder="R$ 0,00"
-                leftSection={<IconCurrencyReal size={16} />}
                 inputMode="decimal"
                 error={amountError}
                 required

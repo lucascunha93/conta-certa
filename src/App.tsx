@@ -3,6 +3,8 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { MantineProvider } from '@mantine/core';
+import { DatesProvider } from '@mantine/dates';
+import 'dayjs/locale/pt-br';
 import '@ionic/react/css/core.css';
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
@@ -57,20 +59,22 @@ const App: React.FC = () => (
       },
     }}
   >
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/home">
-            <Suspense fallback={<div style={{ padding: 24, color: '#334155' }}>Carregando painel...</div>}>
-              <Home />
-            </Suspense>
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/home" />
-          </Route>
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
+    <DatesProvider settings={{ locale: 'pt-br' }}>
+      <IonApp>
+        <IonReactRouter>
+          <IonRouterOutlet>
+            <Route exact path="/home">
+              <Suspense fallback={<div style={{ padding: 24, color: '#334155' }}>Carregando painel...</div>}>
+                <Home />
+              </Suspense>
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
+          </IonRouterOutlet>
+        </IonReactRouter>
+      </IonApp>
+    </DatesProvider>
   </MantineProvider>
 );
 
