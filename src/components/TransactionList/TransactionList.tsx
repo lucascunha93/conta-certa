@@ -1,21 +1,31 @@
 import { useState, useMemo, useCallback } from 'react';
 import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel,
-  IonIcon,
-  IonChip,
-  IonNote,
-  IonText,
-  IonButton,
   IonActionSheet,
   IonModal,
+  IonButton,
 } from '@ionic/react';
-import { trash, create, document, chevronBack, chevronForward, downloadOutline } from 'ionicons/icons';
+import {
+  ActionIcon,
+  Badge,
+  Button,
+  Group,
+  Paper,
+  ScrollArea,
+  SegmentedControl,
+  Stack,
+  Table,
+  Text,
+  ThemeIcon,
+  Title,
+} from '@mantine/core';
+import {
+  IconChevronLeft,
+  IconChevronRight,
+  IconDownload,
+  IconEdit,
+  IconFileText,
+  IconTrash,
+} from '@tabler/icons-react';
 import { Transaction } from '../../types/transaction';
 import './TransactionList.css';
 
@@ -147,123 +157,136 @@ const TransactionList: React.FC<TransactionListProps> = ({
   };
 
   return (
-    <IonCard className="transaction-list-card">
-      <IonCardHeader>
-        <div className="month-navigator">
-          <IonButton fill="clear" size="small" onClick={handlePrevMonth}>
-            <IonIcon slot="icon-only" icon={chevronBack} />
-          </IonButton>
-          <span className="month-label">{MONTH_NAMES[selectedMonth]} {selectedYear}</span>
-          <IonButton fill="clear" size="small" onClick={handleNextMonth}>
-            <IonIcon slot="icon-only" icon={chevronForward} />
-          </IonButton>
-        </div>
+    <Paper className="transaction-list-card" radius="xl" p="lg" withBorder>
+      <Group justify="center" className="month-navigator">
+        <ActionIcon variant="subtle" radius="xl" size="lg" onClick={handlePrevMonth}>
+          <IconChevronLeft size={18} />
+        </ActionIcon>
+        <Text className="month-label">{MONTH_NAMES[selectedMonth]} {selectedYear}</Text>
+        <ActionIcon variant="subtle" radius="xl" size="lg" onClick={handleNextMonth}>
+          <IconChevronRight size={18} />
+        </ActionIcon>
+      </Group>
 
-        <div className="list-header-row">
-          <IonCardTitle>
-            Movimentações
-            <IonChip color="primary" className="transaction-count">
-              {filteredTransactions.length}
-            </IonChip>
-          </IonCardTitle>
-          <IonButton
-            fill="outline"
-            size="small"
-            onClick={() => setShowExportOptions(true)}
-            disabled={filteredTransactions.length === 0 || isExporting}
-            className="export-button"
-          >
-            <IonIcon slot="start" icon={downloadOutline} />
-            {isExporting ? 'Exportando...' : 'Exportar'}
-          </IonButton>
-        </div>
+      <Group justify="space-between" align="center" className="list-header-row">
+        <Group gap="xs">
+          <Title order={4}>Movimentações</Title>
+          <Badge variant="light" color="blue" className="transaction-count">
+            {filteredTransactions.length}
+          </Badge>
+        </Group>
 
-        <IonSegment
-          value={typeFilter}
-          onIonChange={(e) => setTypeFilter(e.detail.value as TypeFilter)}
+        <Button
+          variant="light"
+          color="blue"
+          radius="md"
+          leftSection={<IconDownload size={16} />}
+          onClick={() => setShowExportOptions(true)}
+          disabled={filteredTransactions.length === 0 || isExporting}
+          className="export-button"
         >
-          <IonSegmentButton value="todos">
-            <IonLabel>Todos</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="entrada">
-            <IonLabel>Entradas</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton value="saida">
-            <IonLabel>Saídas</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
-      </IonCardHeader>
+          {isExporting ? 'Exportando...' : 'Exportar'}
+        </Button>
+      </Group>
 
-      <IonCardContent>
-        {filteredTransactions.length === 0 ? (
-          <div className="empty-state">
-            <IonIcon icon={document} size="large" />
-            <p>Nenhuma movimentação em {MONTH_NAMES[selectedMonth]} {selectedYear}</p>
-            <IonText color="medium">
-              <small>
-                {typeFilter === 'todos'
-                  ? 'Adicione uma movimentação usando o botão +'
-                  : `Nenhuma ${typeFilter} neste mês`
-                }
-              </small>
-            </IonText>
-          </div>
-        ) : (
-          <div className="transaction-table-wrapper">
-            <table className="transaction-table">
-              <thead>
-                <tr>
-                  <th>Cliente</th>
-                  <th>Data</th>
-                  <th>CPF</th>
-                  <th>Valor</th>
-                  <th>Tipo</th>
-                  <th>Observações</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
+      <SegmentedControl
+        fullWidth
+        radius="md"
+        value={typeFilter}
+        onChange={(value) => setTypeFilter(value as TypeFilter)}
+        data={[
+          { label: 'Todos', value: 'todos' },
+          { label: 'Entradas', value: 'entrada' },
+          { label: 'Saídas', value: 'saida' },
+        ]}
+      />
+
+      {filteredTransactions.length === 0 ? (
+        <Paper className="empty-state" radius="lg" mt="md">
+          <Stack align="center" gap="xs">
+            <ThemeIcon variant="light" color="gray" radius="xl" size={44}>
+              <IconFileText size={22} />
+            </ThemeIcon>
+            <Text fw={600}>Nenhuma movimentação em {MONTH_NAMES[selectedMonth]} {selectedYear}</Text>
+            <Text c="dimmed" size="sm">
+              {typeFilter === 'todos'
+                ? 'Adicione uma movimentação usando o botão +'
+                : `Nenhuma ${typeFilter} neste mês`
+              }
+            </Text>
+          </Stack>
+        </Paper>
+      ) : (
+        <div className="transaction-table-wrapper">
+          <ScrollArea>
+            <Table
+              className="transaction-table"
+              highlightOnHover
+              withTableBorder
+              horizontalSpacing="md"
+              verticalSpacing="sm"
+            >
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Cliente</Table.Th>
+                  <Table.Th>Data</Table.Th>
+                  <Table.Th>CPF</Table.Th>
+                  <Table.Th>Valor</Table.Th>
+                  <Table.Th>Tipo</Table.Th>
+                  <Table.Th>Observações</Table.Th>
+                  <Table.Th>Ações</Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>
                 {filteredTransactions.map((transaction) => (
-                  <tr key={transaction.id} className={`transaction-row ${transaction.type}`}>
-                    <td className="td-client">
+                  <Table.Tr key={transaction.id} className={`transaction-row ${transaction.type}`}>
+                    <Table.Td className="td-client">
                       <span className="transaction-name">{transaction.name}</span>
-                    </td>
-                    <td>{formatDate(transaction.date)}</td>
-                    <td>{formatCPF(transaction.cpf)}</td>
-                    <td className={`transaction-amount ${transaction.type}`}>
+                    </Table.Td>
+                    <Table.Td>{formatDate(transaction.date)}</Table.Td>
+                    <Table.Td>{formatCPF(transaction.cpf)}</Table.Td>
+                    <Table.Td className={`transaction-amount ${transaction.type}`}>
                       {transaction.type === 'entrada' ? '+' : '-'} {formatCurrency(transaction.amount)}
-                    </td>
-                    <td>
-                      <IonChip color={transaction.type === 'entrada' ? 'success' : 'danger'}>
+                    </Table.Td>
+                    <Table.Td>
+                      <Badge variant="light" color={transaction.type === 'entrada' ? 'green' : 'red'}>
                         {transaction.type === 'entrada' ? 'Entrada' : 'Saída'}
-                      </IonChip>
-                    </td>
-                    <td>
-                      {transaction.observations && (
-                        <IonNote color="medium">{transaction.observations}</IonNote>
+                      </Badge>
+                    </Table.Td>
+                    <Table.Td className="observation-cell">
+                      {transaction.observations ? (
+                        <Text size="sm" c="dimmed">{transaction.observations}</Text>
+                      ) : (
+                        <Text size="sm" c="dimmed">-</Text>
                       )}
-                    </td>
-                    <td className="u-flex-row-center-gap-12">
-                      <IonIcon
-                        icon={create}
-                        className="edit-icon u-clickable"
-                        onClick={() => onEditTransaction?.(transaction)}
-                        title="Editar"
-                      />
-                      <IonIcon
-                        icon={trash}
-                        className="delete-icon u-clickable"
-                        onClick={() => setTransactionToDelete(transaction)}
-                        title="Excluir"
-                      />
-                    </td>
-                  </tr>
+                    </Table.Td>
+                    <Table.Td>
+                      <Group gap={4}>
+                        <ActionIcon
+                          variant="subtle"
+                          color="blue"
+                          onClick={() => onEditTransaction?.(transaction)}
+                          title="Editar"
+                        >
+                          <IconEdit size={18} />
+                        </ActionIcon>
+                        <ActionIcon
+                          variant="subtle"
+                          color="red"
+                          onClick={() => setTransactionToDelete(transaction)}
+                          title="Excluir"
+                        >
+                          <IconTrash size={18} />
+                        </ActionIcon>
+                      </Group>
+                    </Table.Td>
+                  </Table.Tr>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </IonCardContent>
+              </Table.Tbody>
+            </Table>
+          </ScrollArea>
+        </div>
+      )}
 
       <IonActionSheet
         isOpen={showExportOptions}
@@ -324,7 +347,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
           </div>
         </div>
       </IonModal>
-    </IonCard>
+    </Paper>
   );
 };
 

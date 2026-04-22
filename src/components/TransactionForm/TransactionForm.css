@@ -1,13 +1,39 @@
-.transaction-button.entrada {
-  --background: var(--ion-color-success);
-  --background-activated: var(--ion-color-success-shade);
-  --background-focused: var(--ion-color-success-shade);
-  --background-hover: var(--ion-color-success-tint);
+.transaction-form-shell {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(246, 250, 255, 0.9));
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.08);
 }
 
-.transaction-button.saida {
-  --background: var(--ion-color-danger);
-  --background-activated: var(--ion-color-danger-shade);
-  --background-focused: var(--ion-color-danger-shade);
-  --background-hover: var(--ion-color-danger-tint);
+.form-header {
+  gap: 8px;
+}
+
+.transaction-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.form-actions {
+  margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+  .transaction-form-shell {
+    padding: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .transaction-form-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .form-actions {
+    width: 100%;
+  }
+
+  .form-actions button {
+    flex: 1;
+  }
 }

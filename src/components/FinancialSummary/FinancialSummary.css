@@ -1,96 +1,43 @@
-.summary-item {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 8px;
-  background: var(--ion-color-light);
-  transition: all 0.3s ease;
+
+.summary-wrapper {
+  margin-top: 2px;
 }
 
-.summary-item:hover {
+.summary-card {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summary-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 22px rgba(15, 23, 42, 0.08);
 }
 
-.summary-icon {
-  margin-right: 16px;
-  font-size: 2.5rem;
+.summary-value-text {
+  margin-top: 2px;
+  letter-spacing: 0.01em;
 }
 
-.summary-content {
-  flex: 1;
+.summary-card-entrada {
+  background: linear-gradient(140deg, rgba(236, 253, 245, 0.9), rgba(220, 252, 231, 0.72));
 }
 
-.summary-label {
-  font-size: 0.875rem;
-  color: var(--ion-color-medium);
-  margin-bottom: 4px;
+.summary-card-saida {
+  background: linear-gradient(140deg, rgba(254, 242, 242, 0.9), rgba(254, 226, 226, 0.72));
 }
 
-.summary-value {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--ion-color-dark);
+.summary-card-saldo-positive {
+  background: linear-gradient(140deg, rgba(240, 253, 250, 0.9), rgba(204, 251, 241, 0.72));
 }
 
-.summary-item.entrada {
-  background: rgba(var(--ion-color-success-rgb), 0.1);
-  border-left: 4px solid var(--ion-color-success);
-}
-
-.summary-item.entrada .summary-icon {
-  color: var(--ion-color-success);
-}
-
-.summary-item.saida {
-  background: rgba(var(--ion-color-danger-rgb), 0.1);
-  border-left: 4px solid var(--ion-color-danger);
-}
-
-.summary-item.saida .summary-icon {
-  color: var(--ion-color-danger);
-}
-
-.summary-item.saldo {
-  background: rgba(var(--ion-color-primary-rgb), 0.1);
-  border-left: 4px solid var(--ion-color-primary);
-}
-
-.summary-item.saldo .summary-icon {
-  color: var(--ion-color-primary);
-}
-
-.summary-item.saldo.positive {
-  background: rgba(var(--ion-color-success-rgb), 0.1);
-  border-left-color: var(--ion-color-success);
-}
-
-.summary-item.saldo.positive .summary-icon {
-  color: var(--ion-color-success);
-}
-
-.summary-item.saldo.negative {
-  background: rgba(var(--ion-color-danger-rgb), 0.1);
-  border-left-color: var(--ion-color-danger);
-}
-
-.summary-item.saldo.negative .summary-icon {
-  color: var(--ion-color-danger);
+.summary-card-saldo-negative {
+  background: linear-gradient(140deg, rgba(254, 242, 242, 0.9), rgba(254, 226, 226, 0.72));
 }
 
 @media (max-width: 768px) {
-  .summary-item {
-    padding: 12px;
-    margin-bottom: 12px;
-  }
-  
-  .summary-icon {
-    font-size: 2rem;
-    margin-right: 12px;
-  }
-  
-  .summary-value {
-    font-size: 1.1rem;
+  .summary-value-text {
+    font-size: 1.2rem;
   }
 }

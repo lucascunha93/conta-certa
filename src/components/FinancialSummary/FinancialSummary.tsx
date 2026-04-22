@@ -1,12 +1,15 @@
 import {
-  IonCard,
-  IonCardContent,
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonIcon,
-} from '@ionic/react';
-import { arrowUpCircle, arrowDownCircle, wallet } from 'ionicons/icons';
+  Card,
+  Group,
+  SimpleGrid,
+  Text,
+  ThemeIcon,
+} from '@mantine/core';
+import {
+  IconArrowUpRight,
+  IconArrowDownRight,
+  IconWallet,
+} from '@tabler/icons-react';
 import { TransactionSummary } from '../../types/transaction';
 import './FinancialSummary.css';
 
@@ -23,49 +26,50 @@ const FinancialSummary: React.FC<FinancialSummaryProps> = ({ summary }) => {
   };
 
   return (
-    <IonCard>
-      <IonCardContent>
-        <IonGrid>
-          <IonRow>
-            <IonCol size="12" sizeMd="4">
-              <div className="summary-item entrada">
-                <div className="summary-icon">
-                  <IonIcon icon={arrowUpCircle} />
-                </div>
-                <div className="summary-content">
-                  <div className="summary-label">Total de Entradas</div>
-                  <div className="summary-value">{formatCurrency(summary.totalEntradas)}</div>
-                </div>
-              </div>
-            </IonCol>
+    <div className="summary-wrapper">
+      <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md">
+        <Card withBorder radius="lg" className="summary-card summary-card-entrada">
+          <Group justify="space-between" align="flex-start">
+            <div>
+              <Text size="sm" c="dimmed">Total de Entradas</Text>
+              <Text fw={800} size="xl" className="summary-value-text">{formatCurrency(summary.totalEntradas)}</Text>
+            </div>
+            <ThemeIcon size={42} radius="xl" variant="light" color="green">
+              <IconArrowUpRight size={24} />
+            </ThemeIcon>
+          </Group>
+        </Card>
 
-            <IonCol size="12" sizeMd="4">
-              <div className="summary-item saida">
-                <div className="summary-icon">
-                  <IonIcon icon={arrowDownCircle} />
-                </div>
-                <div className="summary-content">
-                  <div className="summary-label">Total de Saídas</div>
-                  <div className="summary-value">{formatCurrency(summary.totalSaidas)}</div>
-                </div>
-              </div>
-            </IonCol>
+        <Card withBorder radius="lg" className="summary-card summary-card-saida">
+          <Group justify="space-between" align="flex-start">
+            <div>
+              <Text size="sm" c="dimmed">Total de Saídas</Text>
+              <Text fw={800} size="xl" className="summary-value-text">{formatCurrency(summary.totalSaidas)}</Text>
+            </div>
+            <ThemeIcon size={42} radius="xl" variant="light" color="red">
+              <IconArrowDownRight size={24} />
+            </ThemeIcon>
+          </Group>
+        </Card>
 
-            <IonCol size="12" sizeMd="4">
-              <div className={`summary-item saldo ${summary.saldo >= 0 ? 'positive' : 'negative'}`}>
-                <div className="summary-icon">
-                  <IonIcon icon={wallet} />
-                </div>
-                <div className="summary-content">
-                  <div className="summary-label">Saldo</div>
-                  <div className="summary-value">{formatCurrency(summary.saldo)}</div>
-                </div>
-              </div>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonCardContent>
-    </IonCard>
+        <Card withBorder radius="lg" className={`summary-card ${summary.saldo >= 0 ? 'summary-card-saldo-positive' : 'summary-card-saldo-negative'}`}>
+          <Group justify="space-between" align="flex-start">
+            <div>
+              <Text size="sm" c="dimmed">Saldo</Text>
+              <Text fw={800} size="xl" className="summary-value-text">{formatCurrency(summary.saldo)}</Text>
+            </div>
+            <ThemeIcon
+              size={42}
+              radius="xl"
+              variant="light"
+              color={summary.saldo >= 0 ? 'teal' : 'red'}
+            >
+              <IconWallet size={24} />
+            </ThemeIcon>
+          </Group>
+        </Card>
+      </SimpleGrid>
+    </div>
   );
 };
 

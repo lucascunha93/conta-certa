@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonTextarea,
-  IonSelect,
-  IonSelectOption,
-  IonButton,
-  IonGrid,
-  IonRow,
-  IonCol,
   IonToast,
 } from '@ionic/react';
+import {
+  Badge,
+  Button,
+  Group,
+  Paper,
+  SegmentedControl,
+  Stack,
+  Text,
+  TextInput,
+  Textarea,
+  Title,
+} from '@mantine/core';
+import { DateInput } from '@mantine/dates';
+import { IconCalendar, IconCurrencyReal, IconId, IconUser } from '@tabler/icons-react';
 import { Transaction } from '../../types/transaction';
 import './TransactionForm.css';
 
@@ -53,6 +53,20 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
   };
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [amountError, setAmountError] = useState<string | null>(null);
+
+  const parseISOToDate = (value: string): Date | null => {
+    if (!value) return null;
+    const date = new Date(`${value}T00:00:00`);
+    return Number.isNaN(date.getTime()) ? null : date;
+  };
+
+  const formatDateToISO = (value: Date | null): string => {
+    if (!value) return new Date().toISOString().split('T')[0];
+    const localDate = new Date(value.getTime() - (value.getTimezoneOffset() * 60000));
+    return localDate.toISOString().split('T')[0];
+  };
 
   const formatCPF = (value: string): string => {
     const cleanValue = value.replaceAll(/\D/g, '');
@@ -64,8 +78,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setNameError(null);
+    setAmountError(null);
 
     if (!formData.name.trim()) {
+      setNameError('Informe o nome do cliente');
       setToastMessage('Nome é obrigatório');
       setShowToast(true);
       return;
@@ -73,6 +90,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
 
     const amountNumber = parseBRL(formData.amount);
     if (!formData.amount || amountNumber <= 0) {
+      setAmountError('Digite um valor maior que zero');
       setToastMessage('Valor deve ser maior que zero');
       setShowToast(true);
       return;
@@ -111,115 +129,115 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onAddTransaction, ini
 
   return (
     <>
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>{isEditMode ? 'Editar Movimentação' : 'Nova Movimentação'}</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <form onSubmit={handleSubmit}>
-            <IonGrid>
-              <IonRow>
-                <IonCol size="12" sizeMd="6">
-                  <IonItem>
-                    <IonLabel position="stacked">Tipo</IonLabel>
-                    <IonSelect
-                      value={formData.type}
-                      onIonChange={(e) => setFormData({ ...formData, type: e.detail.value })}
-                    >
-                      <IonSelectOption value="entrada">Entrada</IonSelectOption>
-                      <IonSelectOption value="saida">Saída</IonSelectOption>
-                    </IonSelect>
-                  </IonItem>
-                </IonCol>
-                <IonCol size="12" sizeMd="6">
-                  <IonItem>
-                    <IonLabel position="stacked">Data</IonLabel>
-                    <IonInput
-                      type="date"
-                      value={formData.date}
-                      onIonInput={(e) => setFormData({ ...formData, date: e.detail.value! })}
-                      required
-                    />
-                  </IonItem>
-                </IonCol>
-              </IonRow>
+      <Paper className="transaction-form-shell" radius="xl" p="lg" withBorder>
+        <Group justify="space-between" align="flex-start" className="form-header">
+          <div>
+            <Title order={3}>{isEditMode ? 'Editar Movimentação' : 'Nova Movimentação'}</Title>
+            <Text c="dimmed" size="sm" mt={4}>
+              Preencha os dados com cuidado para manter seu fluxo financeiro preciso.
+            </Text>
+          </div>
+          <Badge variant="light" color={formData.type === 'entrada' ? 'green' : 'red'}>
+            {formData.type === 'entrada' ? 'Entrada' : 'Saída'}
+          </Badge>
+        </Group>
 
-              <IonRow>
-                <IonCol size="12" sizeMd="6">
-                  <IonItem>
-                    <IonLabel position="stacked">Nome</IonLabel>
-                    <IonInput
-                      value={formData.name}
-                      onIonInput={(e) => setFormData({ ...formData, name: e.detail.value! })}
-                      placeholder="Nome completo"
-                      required
-                    />
-                  </IonItem>
-                </IonCol>
-                <IonCol size="12" sizeMd="6">
-                  <IonItem>
-                    <IonLabel position="stacked">CPF</IonLabel>
-                    <IonInput
-                      value={formatCPF(formData.cpf)}
-                      onIonInput={(e) => setFormData({ ...formData, cpf: e.detail.value! })}
-                      placeholder="000.000.000-00"
-                      maxlength={14}
-                    />
-                  </IonItem>
-                </IonCol>
-              </IonRow>
+        <form onSubmit={handleSubmit}>
+          <Stack gap="md" mt="md">
+            <SegmentedControl
+              fullWidth
+              radius="md"
+              value={formData.type}
+              onChange={(value) => setFormData({ ...formData, type: value as 'entrada' | 'saida' })}
+              data={[
+                { label: 'Entrada', value: 'entrada' },
+                { label: 'Saída', value: 'saida' },
+              ]}
+            />
 
-              <IonRow>
-                <IonCol size="12" sizeMd="6">
-                  <IonItem>
-                    <IonLabel position="stacked">Valor (R$)</IonLabel>
-                    <IonInput
-                      type="text"
-                      inputmode="decimal"
-                      value={formData.amount}
-                      onIonInput={(e) => {
-                        const raw = e.detail.value ?? '';
-                        setFormData({ ...formData, amount: formatBRL(raw) });
-                      }}
-                      placeholder="R$ 0,00"
-                      required
-                      maxlength={20}
-                    />
-                  </IonItem>
-                </IonCol>
-                <IonCol size="12" sizeMd="6">
-                  <IonItem>
-                    <IonLabel position="stacked">Observações</IonLabel>
-                    <IonTextarea
-                      value={formData.observations}
-                      onIonInput={(e) => setFormData({ ...formData, observations: e.detail.value! })}
-                      placeholder="Observações opcionais"
-                      rows={1}
-                    />
-                  </IonItem>
-                </IonCol>
-              </IonRow>
+            <div className="transaction-form-grid">
+              <DateInput
+                value={parseISOToDate(formData.date)}
+                onChange={(value) => {
+                  const nextDate = typeof value === 'string'
+                    ? new Date(value)
+                    : (value ?? null);
+                  setFormData({ ...formData, date: formatDateToISO(nextDate) });
+                }}
+                label="Data"
+                placeholder="Selecione a data"
+                leftSection={<IconCalendar size={16} />}
+                valueFormat="DD/MM/YYYY"
+                clearable={false}
+                required
+                radius="md"
+              />
 
-              <IonRow>
-                <IonCol>
-                  <IonButton 
-                    type="submit" 
-                    expand="block" 
-                    className={`transaction-button ${formData.type}`}
-                  >
-                    {submitButtonLabel}
-                  </IonButton>
-                  {onCancel && (
-                    <IonButton expand="block" color="medium" onClick={onCancel} className="u-mt-8">
-                      Cancelar
-                    </IonButton>
-                  )}
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </form>
-        </IonCardContent>
-      </IonCard>
+              <TextInput
+                value={formData.name}
+                onChange={(e) => {
+                  setNameError(null);
+                  setFormData({ ...formData, name: e.currentTarget.value });
+                }}
+                label="Nome"
+                placeholder="Nome completo"
+                leftSection={<IconUser size={16} />}
+                error={nameError}
+                required
+                radius="md"
+              />
+
+              <TextInput
+                value={formatCPF(formData.cpf)}
+                onChange={(e) => setFormData({ ...formData, cpf: e.currentTarget.value })}
+                label="CPF"
+                placeholder="000.000.000-00"
+                leftSection={<IconId size={16} />}
+                maxLength={14}
+                radius="md"
+              />
+
+              <TextInput
+                value={formData.amount}
+                onChange={(e) => {
+                  setAmountError(null);
+                  setFormData({ ...formData, amount: formatBRL(e.currentTarget.value) });
+                }}
+                label="Valor (R$)"
+                placeholder="R$ 0,00"
+                leftSection={<IconCurrencyReal size={16} />}
+                inputMode="decimal"
+                error={amountError}
+                required
+                maxLength={20}
+                radius="md"
+              />
+            </div>
+
+            <Textarea
+              value={formData.observations}
+              onChange={(e) => setFormData({ ...formData, observations: e.currentTarget.value })}
+              label="Observações"
+              placeholder="Notas opcionais para contexto"
+              minRows={2}
+              maxRows={4}
+              autosize
+              radius="md"
+            />
+
+            <Group justify="flex-end" gap="sm" className="form-actions">
+              {onCancel && (
+                <Button variant="default" onClick={onCancel} radius="md">
+                  Cancelar
+                </Button>
+              )}
+              <Button type="submit" color={formData.type === 'entrada' ? 'green' : 'red'} radius="md">
+                {submitButtonLabel}
+              </Button>
+            </Group>
+          </Stack>
+        </form>
+      </Paper>
 
       <IonToast
         isOpen={showToast}

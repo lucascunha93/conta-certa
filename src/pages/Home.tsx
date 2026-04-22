@@ -85,7 +85,7 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <div className="home-container">
-          <div className="transactions-section">
+          <div className="transactions-section home-reveal home-reveal-1">
             <TransactionList
               transactions={monthTransactions}
               selectedMonth={selectedMonth}
@@ -95,7 +95,9 @@ const Home: React.FC = () => {
               onEditTransaction={handleEditTransaction}
             />
           </div>
-          <FinancialSummary summary={monthlySummary} />
+          <div className="home-reveal home-reveal-2">
+            <FinancialSummary summary={monthlySummary} />
+          </div>
         </div>
 
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
